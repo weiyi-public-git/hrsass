@@ -1,7 +1,9 @@
 <template>
   <div v-if="!item.hidden">
+    <!-- 通过代码发现,当路由中的属性hidden为true时,表示该路由不显示在左侧菜单中 -->
     <template v-if="hasOneShowingChild(item.children,item) && (!onlyOneChild.children||onlyOneChild.noShowingChildren)&&!item.alwaysShow">
       <app-link v-if="onlyOneChild.meta" :to="resolvePath(onlyOneChild.path)">
+        <!-- element-UI的二级菜单 -->
         <el-menu-item :index="resolvePath(onlyOneChild.path)" :class="{'submenu-title-noDropdown':!isNest}">
           <item :icon="onlyOneChild.meta.icon||(item.meta&&item.meta.icon)" :title="onlyOneChild.meta.title" />
         </el-menu-item>

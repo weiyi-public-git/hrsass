@@ -2,6 +2,8 @@
 export default {
   name: 'MenuItem',
   functional: true,
+  // 表示该组件为一个函数式组件
+  // 函数式组件: 没有data状态,没有响应式数据,只会接收props属性
   props: {
     icon: {
       type: String,
