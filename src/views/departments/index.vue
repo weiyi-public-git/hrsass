@@ -4,77 +4,12 @@
       <!-- 组织架构的内容 -->
       <el-card class="tree-card">
         <!-- 放置结构内容 -->
-        <el-row
-          type="flex"
-          justify="space-between"
-          align="middle"
-          style="height: 40px"
-        >
-          <el-col>
-            <!-- 左侧内容 -->
-            <span>江苏传智播客教育科技股份有限公司</span>
-          </el-col>
-          <el-col :span="4">
-            <!-- 右侧内容 -->
-            <el-row type="flex" justify="end">
-              <el-col>负责人</el-col>
-              <el-col>
-                <!-- 放置下拉菜单 -->
-                <el-dropdown>
-                  <!-- 内容 -->
-                  <span>操作
-                    <i class="el-icon-arrow-down" />
-                  </span>
-                  <el-dropdown-menu slot="dropdown">
-                    <!-- 下拉选项 -->
-                    <el-dropdown-item>添加子部门</el-dropdown-item>
-                  </el-dropdown-menu>
-                </el-dropdown>
-              </el-col>
-            </el-row>
-          </el-col>
-        </el-row>
+        <TreeTools :tree-node="company" :is-root="true" />
         <!-- 放置一个el-tree -->
-        <el-tree
-          :data="departs"
-          :props="defaultProps"
-          :default-expand-all="true"
-        >
+        <el-tree :data="departs" :props="defaultProps" :default-expand-all="true">
           <!-- 传入内容,插槽内容 会循环多次 有多少节点 就循环多少次 -->
           <!-- 作用域插槽 slot-scope="obj" 接收传递给插槽的数据 data 每个节点的数据对象 -->
-          <el-row
-            slot-scope="{ data }"
-            type="flex"
-            justify="space-between"
-            align="middle"
-            style="height: 40px; width: 100%;"
-          >
-            <el-col>
-              <!-- 左侧内容 -->
-              <span>{{ data.name }}</span>
-            </el-col>
-            <el-col :span="4">
-              <!-- 右侧内容 -->
-              <el-row type="flex" justify="end">
-                <el-col>{{ data.manager }}</el-col>
-                <el-col>
-                  <!-- 放置下拉菜单 -->
-                  <el-dropdown>
-                    <!-- 内容 -->
-                    <span>操作
-                      <i class="el-icon-arrow-down" />
-                    </span>
-                    <el-dropdown-menu slot="dropdown">
-                      <!-- 下拉选项 -->
-                      <el-dropdown-item>添加子部门</el-dropdown-item>
-                      <el-dropdown-item>编辑部门</el-dropdown-item>
-                      <el-dropdown-item>删除部门</el-dropdown-item>
-                    </el-dropdown-menu>
-                  </el-dropdown>
-                </el-col>
-              </el-row>
-            </el-col>
-          </el-row>
+          <TreeTools slot-scope="{data}" :tree-node="data" />
         </el-tree>
       </el-card>
     </div>
@@ -85,9 +20,16 @@
 // 当标签为label的时候,子节点为children的时候,下面语句可以省略
 // label: 'label'
 // children: 'children'
+import TreeTools from './components/tree-tools.vue'
+import { getDepartments } from '@/api/departments'
+import { tranListToTreeData } from '@/utils'
 export default {
+  components: {
+    TreeTools
+  },
   data() {
     return {
+      company: { }, // 就是头部的数据结构
       defaultProps: {
         label: 'name', // 表示从这个属性显示内容
         children: 'children' // 表示从这个属性去找子节点
@@ -97,6 +39,17 @@ export default {
         { name: '行政部', manager: '刘备' },
         { name: '人事部', manager: '孙权' }
       ]
+    }
+  },
+  created() {
+    this.getDepartments() // 调用自身的方法
+  },
+  methods: {
+    async getDepartments() {
+      const result = await getDepartments()
+      this.company = { name: result.companyName, manager: '负责人' }
+      this.departs = tranListToTreeData(result.depts, '') // 需要将其转化为树形结构
+      console.log(result)
     }
   }
 }
