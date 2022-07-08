@@ -15,7 +15,7 @@ export function getDepartments() {
  * * */
 export function delDepartment(id) {
   return request({
-    ulr: ` /company/department/${id}`,
+    url: `/company/department/${id}`,
     method: 'delete' // 接口满足restful接口规范
     // 同样的地址 不同的方法 执行不同的业务
     // delete 删除业务
@@ -28,10 +28,30 @@ export function delDepartment(id) {
 /** *
  * 新增部门接口
  */
-export function addDepartment(data) {
+export function addDepartments(data) {
   return request({
     url: '/company/department',
     method: 'post',
     data // axios的body参数,data
+  })
+}
+
+/** *
+ * 获取某个部门的详情
+ */
+export function getDepartDetail(id) {
+  return request({
+    url: `/company/department/${id}`
+  })
+}
+
+/** ***
+ * 保存编辑的数据
+ * **** */
+export function updateDepartment(data) {
+  return request({
+    url: `/company/department/${data.id}`,
+    method: 'put',
+    data
   })
 }
