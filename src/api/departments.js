@@ -10,3 +10,17 @@ export function getDepartments() {
     url: '/company/department'
   })
 }
+/** ***
+ * 删除组织架构的部门
+ * * */
+export function delDepartment(id) {
+  return request({
+    ulr: ` /company/department/${id}`,
+    method: 'delete' // 接口满足restful接口规范
+    // 同样的地址 不同的方法 执行不同的业务
+    // delete 删除业务
+    // get 获取业务
+    // post 新增或者添加业务
+    // put 修改业务
+  })
+}
