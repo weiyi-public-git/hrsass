@@ -4,7 +4,7 @@
       <!-- 组织架构的内容 -->
       <el-card class="tree-card">
         <!-- 放置结构内容 -->
-        <TreeTools :tree-node="company" :is-root="true" @delDepts="addDepts" />
+        <TreeTools :tree-node="company" :is-root="true" @addDepts="addDepts" />
         <!-- 放置一个el-tree -->
         <el-tree :data="departs" :props="defaultProps" :default-expand-all="true">
           <!-- 传入内容,插槽内容 会循环多次 有多少节点 就循环多少次 -->
@@ -14,7 +14,7 @@
       </el-card>
     </div>
     <!-- 放置新增弹层组件 -->
-    <AddDept :show-dialog="showDialog" />
+    <add-dept :show-dialog="showDialog" :tree-node="node" />
   </div>
 </template>
 
@@ -50,7 +50,6 @@ export default {
       const result = await getDepartments()
       this.company = { name: result.companyName, manager: '负责人' }
       this.departs = tranListToTreeData(result.depts, '') // 需要将其转化为树形结构
-      console.log(result)
     },
     // 监听tree-tools中触发的点击添加子部门的事件
     // node 是我们当前点击的部门
