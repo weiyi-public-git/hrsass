@@ -11,7 +11,7 @@ import '@/styles/index.scss' // global css
 import App from './App'
 import store from './store'
 import router from './router'
-
+import Components from '@/components'
 import * as directives from '@/directives'
 import '@/icons' // icon
 import '@/permission' // permission control
@@ -25,6 +25,8 @@ Object.keys(directives).forEach(key => {
   Vue.directive(key, directives[key])
   // 在管理自定义指令中取出每一个指令
 })
+// 注册自定义组件
+Vue.use(Components)
 Vue.config.productionTip = false
 
 new Vue({
