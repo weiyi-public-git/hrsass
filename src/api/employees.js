@@ -8,3 +8,12 @@ export function getEmployeeSimple() {
     url: '/sys/user/simple'
   })
 }
+/** **
+ * 获取员工综合列表
+ */
+export function getEmployeesList(params) {
+  return request({
+    url: '/sys/user/',
+    params
+  })
+}
