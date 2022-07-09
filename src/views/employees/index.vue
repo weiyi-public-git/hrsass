@@ -33,13 +33,13 @@
           </template>
         </el-table-column>
         <el-table-column label="操作" sortable="" fixed="right" width="280">
-          <template>
+          <template slot-scope="{ row }">
             <el-button type="text" size="small">查看</el-button>
             <el-button type="text" size="small">转正</el-button>
             <el-button type="text" size="small">调岗</el-button>
             <el-button type="text" size="small">离职</el-button>
             <el-button type="text" size="small">角色</el-button>
-            <el-button type="text" size="small">删除</el-button>
+            <el-button type="text" size="small" @click="delEmployee(row.id)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -57,8 +57,8 @@
 </template>
 
 <script>
-import { getEmployeesList } from '@/api/employees'
-import EmployeesEnum from '@/api/constant/employees'
+import { getEmployeeList, delEmployee } from '@/api/employees'
+import EmployeeEnum from '@/api/constant/employees'
 export default {
   data() {
     return {
@@ -72,12 +72,12 @@ export default {
     }
   },
   created() {
-    this.getEmployeesList()
+    this.getEmployeeList()
   },
   methods: {
-    async getEmployeesList() {
+    async getEmployeeList() {
       this.loading = true
-      const { total, rows } = await getEmployeesList(this.page)
+      const { total, rows } = await getEmployeeList(this.page)
       this.page.total = total
       this.list = rows
       this.loading = false
@@ -85,15 +85,26 @@ export default {
     // newPage是最新的页码
     changePage(newPage) {
       this.page.page = newPage // 赋值最新的页码
-      this.getEmployeesList() // 重新拉取数据
+      this.getEmployeeList() // 重新拉取数据
     },
     // 格式化聘用形式
     formatEmployment(row, column, cellValue, index) {
       // 要去找 1所对应的值
-      const obj = EmployeesEnum.hireType.find(item => item.id === cellValue)
+      const obj = EmployeeEnum.hireType.find(item => item.id === cellValue)
       return obj ? obj.value : '未知'
+    },
+    async delEmployee(id) {
+      try {
+        await this.$confirm('您确定删除该员工吗')
+        await delEmployee(id)
+        this.getEmployeeList()
+        this.$message.success('删除员工成功')
+      } catch (error) {
+        console.log(error)
+      }
     }
   }
+
 }
 </script>
 
