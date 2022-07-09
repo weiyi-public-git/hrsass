@@ -13,6 +13,7 @@ import store from './store'
 import router from './router'
 import Components from '@/components'
 import * as directives from '@/directives'
+import * as filters from '@/filters'
 import '@/icons' // icon
 import '@/permission' // permission control
 
@@ -25,6 +26,11 @@ Object.keys(directives).forEach(key => {
   Vue.directive(key, directives[key])
   // 在管理自定义指令中取出每一个指令
 })
+// 每一个键名表示自定义指令的方法名称
+Object.keys(filters).forEach(key => {
+  Vue.filter(key, filters[key]) // 注册自定义的过滤器
+})
+
 // 注册自定义组件
 Vue.use(Components)
 Vue.config.productionTip = false
