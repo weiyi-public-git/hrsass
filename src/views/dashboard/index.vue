@@ -1,6 +1,7 @@
 <template>
   <div class="dashboard-container">
     <div class="dashboard-text">name: {{ name }}</div>
+    <upload-excel />
     <page-tools :show-before="true">
       <!-- 插槽除了slot="name" v-slot -->
       <!-- slot="名称" v-slot:名称 -->
