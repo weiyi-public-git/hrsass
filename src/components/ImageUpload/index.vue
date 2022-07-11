@@ -8,8 +8,9 @@
       :on-preview="preview"
       :on-remove="handleRemove"
       :on-change="changeFile"
-      :file-list="fileList"
       :before-upload="beforeUpload"
+      :http-request="upload"
+      :file-list="fileList"
       :class="{ disabled : fileComputed}"
     >
       <i class="el-icon-plus" />
@@ -21,6 +22,12 @@
 </template>
 
 <script>
+import COS from 'cos-js-sdk-v5' // 引入腾讯云cos包
+// 实例化COS对象
+const cos = new COS({
+  SecretId: 'AKIDjMo7EAuSsFVq7GLRccQ5YqxufDajdIm5', // 身份识别 ID
+  SecretKey: 'r482h8MNAj8NRdbLtEKEyYvc7R4VjlaL' // 身份密钥
+})
 export default {
   data() {
     return {
@@ -56,7 +63,6 @@ export default {
     },
     // 上传文件之前的钩子 参数为上传的问价 若返回false或者返回Promise且被reject,则停止上传
     beforeUpload(file) {
-      console.log(file)
       const types = ['image/jpeg', 'image/gif', 'image/bmp', 'image/png']
       if (!types.some(item => item === file.type)) {
         // 如果不存在
@@ -71,6 +77,22 @@ export default {
         return false
       }
       return true // 可以继续上传
+    },
+    upload(params) {
+      // 自定义上传动作 有个参数 有个file对象,是我们需要上传到腾讯云服务器的内容
+      console.log(params.file)
+      if (params) {
+        // 执行上传操作
+        cos.putObject({
+          Bucket: 'xiaoxu-1314-1312634560', // 存储桶的名称
+          Region: 'ap-beijing', // 存储桶所在地域
+          Key: params.file.name, // 对象键 对象在存储桶中的唯一标识
+          Body: params.file, // 要上传的文件对象
+          StorageClass: 'STANDARD' // 上传的模式类型 直接默认
+        }, function(err, data) {
+          console.log(err || data)
+        })
+      }
     }
   }
 }
