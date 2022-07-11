@@ -14,5 +14,13 @@ export default {
       title: '员工管理', // 这里为什么要用title 因为左侧导航读取了这里的title属性
       icon: 'people'
     }
+  },
+  {
+    path: 'detail/:id', // ?的含义表示该参数可传可不传 动态路由参数 /employees/detail/123
+    component: () => import('@/views/employees/detail'),
+    hidden: true, // 表示该内容不在左侧菜单显示
+    meta: {
+      title: '员工详情'
+    }
   }]
 }
