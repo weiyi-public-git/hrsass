@@ -52,7 +52,7 @@
             <el-button type="text" size="small">转正</el-button>
             <el-button type="text" size="small">调岗</el-button>
             <el-button type="text" size="small">离职</el-button>
-            <el-button type="text" size="small">角色</el-button>
+            <el-button type="text" size="small" @click="editRole(row.id)">角色</el-button>
             <el-button type="text" size="small" @click="delEmployee(row.id)">删除</el-button>
           </template>
         </el-table-column>
@@ -70,12 +70,14 @@
     <!-- 放置组件弹层 -->
     <!-- sync修饰符 是子组件去修改父组件数据的一个语法糖 -->
     <add-employee :show-dialog.sync="showDialog" />
+    <!-- dom为一个canvas的dom对象, info为转化二维码的信息 -->
     <el-dialog title="二维码" :visible.sync="showCodeDialog">
       <el-row type="flex" justify="center">
         <canvas ref="myCanvas" />
       </el-row>
     </el-dialog>
-    <!-- dom为一个canvas的dom对象, info为转化二维码的信息 -->
+    <!-- 放置分配组件 -->
+    <assign-role ref="assignRole" :show-role-dialog.sync="showRoleDialog" :user-id="userId" />
   </div>
 </template>
 
@@ -84,9 +86,10 @@ import { getEmployeeList, delEmployee } from '@/api/employees'
 import EmployeeEnum from '@/api/constant/employees'
 import AddEmployee from './components/add-employee.vue'
 import { formatDate } from '@/filters'
+import AssignRole from './components/assign-role'
 import QrCode from 'qrcode'
 export default {
-  components: { AddEmployee },
+  components: { AddEmployee, AssignRole },
   data() {
     return {
       list: [], // 接收数组
@@ -97,7 +100,9 @@ export default {
       },
       loading: false, // 显示遮罩层
       showDialog: false, // 默认是关闭的弹层
-      showCodeDialog: false // 显示二维码弹层
+      showCodeDialog: false, // 显示二维码弹层
+      showRoleDialog: false, // 显示分配角色弹层
+      userId: null // 定义一个userId
     }
   },
   created() {
@@ -197,6 +202,12 @@ export default {
       } else {
         this.$message.warning('该用户还未上传头像')
       }
+    },
+    async editRole(id) {
+      // 显示弹层
+      this.userId = id // props赋值 props赋值渲染是异步的
+      await this.$refs.assignRole.getUserDetailById(id) // 调用子组件方法
+      this.showRoleDialog = true
     }
   }
 
