@@ -58,7 +58,7 @@
         <el-col :span="12">
           <el-form-item label="员工头像">
             <!-- 放置上传图片 -->
-
+            <image-upload ref="staffPhoto" />
           </el-form-item>
         </el-col>
       </el-row>
@@ -90,6 +90,7 @@
 
         <el-form-item label="员工照片">
           <!-- 放置上传图片 -->
+          <image-upload ref="myStaffPhoto" />
         </el-form-item>
         <el-form-item label="国家/地区">
           <el-select v-model="formData.nationalArea" class="inputW2">
@@ -285,7 +286,7 @@
 <script>
 import EmployeeEnum from '@/api/constant/employees'
 import { getUserDetailById } from '@/api/user'
-import { getPersonalDetail, saveUserDetailById } from '@/api/employees'
+import { getPersonalDetail, saveUserDetailById, updatePersonal } from '@/api/employees'
 export default {
   data() {
     return {
@@ -364,15 +365,41 @@ export default {
   methods: {
     async getUserDetailById() {
       this.userInfo = await getUserDetailById(this.userId)
+      if (this.userInfo.staffPhoto && this.userInfo.staffPhoto.trim()) {
+        // 有值就表示,已经有了一个上传成功的图片了
+        // 上传成功的图片, upload:true 表示该图片已经上传成功了
+        this.$refs.staffPhoto.fileList = [{ url: this.userInfo.staffPhoto, upload: true }]
+      }
     },
     async getPersonalDetail() {
       this.formData = await getPersonalDetail(this.userId)
+      if (this.formData.staffPhoto && this.formData.staffPhoto.trim()) {
+        this.$refs.myStaffPhoto.fileList = [{ url: this.formData.staffPhoto, upload: true }]
+      }
     },
     async saveUser() {
-      await saveUserDetailById(this.userInfo)
+      // 获取头像中地址
+      const fileList = this.$refs.staffPhoto.fileList // 数组
+      // 判断当前的图片有没有上传完成
+      if (fileList.some(item => !item.upload)) {
+        // 说明此时有图片还没有上传完成
+        this.$message.warning('此时图片还没有上传成功')
+        return
+      }
+      // staffPhoto由于接口问题 必须给一个 有空格的字符串才能存进去
+      await saveUserDetailById({ ...this.userInfo, staffPhoto: fileList.length ? fileList[0].url : ' ' })
       this.$message.success('保存用户基本信息成功')
     },
-    savePersonal() {}
+    async savePersonal() {
+      const fileList = this.$refs.myStaffPhoto.fileList
+      if (fileList.some(item => !item.upload)) {
+        // 说明此时有图片还没有上传完成
+        this.$message.warning('此时图片还没有上传成功')
+        return
+      }
+      await updatePersonal({ ...this.formData, staffPhoto: fileList.length ? fileList[0].url : ' ' })
+      this.$message.success('保存用户基础信息成功')
+    }
   }
 }
 </script>

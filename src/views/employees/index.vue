@@ -19,6 +19,18 @@
       <el-table v-loading="loading" :data="list" border="">
         <el-table-column type="index" label="序号" sortable="" />
         <el-table-column label="姓名" sortable="" prop="username" />
+        <el-table-column width="120px" label="头像" align="center">
+          <!-- 插槽 -->
+          <template v-slot="{ row }">
+            <img
+              v-imageerror="require('@/assets/common/bigUserHeader.png')"
+              :src="row.staffPhoto"
+              alt=""
+              style="border-radius: 50%; width: 100px; height: 100px; padding: 10px"
+              @click="showQrCode(row.staffPhoto)"
+            >
+          </template>
+        </el-table-column>
         <el-table-column label="工号" sortable="" prop="workNumber" />
         <!-- 格式化聘用形式 -->
         <el-table-column label="聘用形式" sortable :formatter="formatEmployment" prop="formOfEmployment" />
@@ -58,6 +70,12 @@
     <!-- 放置组件弹层 -->
     <!-- sync修饰符 是子组件去修改父组件数据的一个语法糖 -->
     <add-employee :show-dialog.sync="showDialog" />
+    <el-dialog title="二维码" :visible.sync="showCodeDialog">
+      <el-row type="flex" justify="center">
+        <canvas ref="myCanvas" />
+      </el-row>
+    </el-dialog>
+    <!-- dom为一个canvas的dom对象, info为转化二维码的信息 -->
   </div>
 </template>
 
@@ -66,6 +84,7 @@ import { getEmployeeList, delEmployee } from '@/api/employees'
 import EmployeeEnum from '@/api/constant/employees'
 import AddEmployee from './components/add-employee.vue'
 import { formatDate } from '@/filters'
+import QrCode from 'qrcode'
 export default {
   components: { AddEmployee },
   data() {
@@ -77,7 +96,8 @@ export default {
         total: 0 // 总数
       },
       loading: false, // 显示遮罩层
-      showDialog: false // 默认是关闭的弹层
+      showDialog: false, // 默认是关闭的弹层
+      showCodeDialog: false // 显示二维码弹层
     }
   },
   created() {
@@ -165,6 +185,18 @@ export default {
       // 简化成一行代码
       // return rows.map(item => Object.keys(headers).map(key => item[headers[key]]))
       // 需要处理时间格式问题
+    },
+    showQrCode(url) {
+      // url存在的情况, 才弹出层
+      if (url) {
+        this.showCodeDialog = true // 数据更新了, 但是页面的渲染是异步的
+        this.$nextTick(() => {
+          QrCode.toCanvas(this.$refs.myCanvas, url) // 将地址转化为二维码
+          // 如果转化的二维码后面信息是一个地址 ,就会跳转到该地址
+        })
+      } else {
+        this.$message.warning('该用户还未上传头像')
+      }
     }
   }
 

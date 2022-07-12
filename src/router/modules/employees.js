@@ -22,5 +22,14 @@ export default {
     meta: {
       title: '员工详情'
     }
-  }]
+  },
+  {
+    path: 'print/:id', // 默认二级路由
+    component: () => import('@/views/employees/print'), // 按需加载
+    hidden: true,
+    meta: {
+      title: '打印' // 标记当前路由规则的中文名称 后续在做左侧菜单时 使用
+    }
+  }
+  ]
 }

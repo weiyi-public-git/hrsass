@@ -2,6 +2,7 @@
 import PageTools from './PageTools'
 import UploadExcel from './UploadExcel'
 import ImageUpload from './ImageUpload'
+import Print from 'vue-print-nb'
 export default {
   install(Vue) { // Vue的实例对象
     // 完成组件的注册
@@ -9,6 +10,7 @@ export default {
     Vue.component('PageTools', PageTools)
     Vue.component('UploadExcel', UploadExcel)
     Vue.component('ImageUpload', ImageUpload) // 注册图片上传组件
+    Vue.use(Print) // 注册打印组件
   }
 }
 // Vue.use()
