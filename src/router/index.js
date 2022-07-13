@@ -90,7 +90,7 @@ export const asyncRoutes = [
 const createRouter = () => new Router({
   // mode: 'history', // require service support
   scrollBehavior: () => ({ y: 0 }),
-  routes: [...constantRoutes, ...asyncRoutes] // 静态路由和动态路由的临时合并
+  routes: [...constantRoutes] // 静态路由和动态路由的临时合并
 })
 
 const router = createRouter() // 实例化一个路由
