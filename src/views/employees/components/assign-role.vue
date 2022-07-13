@@ -59,6 +59,7 @@ export default {
     async btnOK() {
       await assignRoles({ id: this.userId, roleIds: this.roleIds }) // 保存用户角色
       // 关闭弹层
+      this.$message.success('分配角色成功')
       this.$emit('update:showRoleDialog', false)
     },
     btnCancel() {

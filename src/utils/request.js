@@ -41,14 +41,25 @@ service.interceptors.response.use(response => {
   const { success, message, data } = response.data
   // 要根据success的成功与否决定下面的操作
   if (success) {
-    return data
+    // 此时认为业务执行成功了
+    return data // 返回用户所需要的数据
   } else {
+    // 当业务失败的时候
     Message.error(message) // 提示错误消息
-    return Promise.error(new Error(message))
+    return Promise.reject(new Error(message))
   }
-}, error => {
-  Message.error(error.message) // 提示错误信息
-  return Promise.reject(error) // 返回执行成功,让当前的执行链跳出成功 直接进入catch
+}, async error => {
+  // error 有response对象 config
+  if (error.response && error.response.data && error.response.data.code === 10002) {
+    // 后端告诉前端token超时了
+    await store.dispatch('user/lgout') // 调用登出action
+    router.push('/login') // 跳到登录页
+  }
+  // 失败
+  // Message等同于 this.$message
+  Message.error(error.message) // 提示错误
+  // reject
+  return Promise.reject(error) // 传入一个错误的对象  就认为promise执行链 进入了catch
 })
 // 响应拦截器
 
