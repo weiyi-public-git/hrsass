@@ -33,7 +33,7 @@ router.beforeEach(async(to, from, next) => {
         // routes就是筛选得到的动态路由
         // console.log(routes)
         // 动态路由 添加到 路由表中 默认的路由表 只有静态路由 没有动态路由
-        router.addRoutes(routes) // 添加动态路由到路由表
+        router.addRoutes([...routes], { path: '*', redirect: '/404', hidden: true }) // 添加动态路由到路由表
         // 添加完动态路由之后
         next(to.path) // 相当于跳到对应的地址 相当于多做一次跳转 为什么要多做一次跳转
       } else {
