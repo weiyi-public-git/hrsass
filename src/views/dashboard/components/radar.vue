@@ -11,18 +11,13 @@ require('echarts/lib/chart/radar') // 引入雷达图
 require('echarts/lib/component/tooltip')
 require('echarts/lib/component/title')
 export default {
-  created() {
-    // 实例创建完毕 页面渲染完毕?
-  },
   mounted() {
     const myChart = echarts.init(this.$refs.myDiv)
     myChart.setOption({
       title: {
-        text: 'Basic Radar Chart'
+        text: '基础雷达图'
       },
-      legend: {
-        data: ['Allocated Budget', 'Actual Spending']
-      },
+      tooltip: {},
       radar: {
         // shape: 'circle',
         // 每个区域的最高值
@@ -37,16 +32,16 @@ export default {
       },
       series: [
         {
-          name: 'Budget vs spending',
+          name: '张三 vs 李四',
           type: 'radar',
           data: [
             {
               value: [42, 30, 20, 35, 50, 18],
-              name: '张三'
+              name: '张三指标'
             },
             {
               value: [50, 14, 28, 26, 42, 21],
-              name: '李四'
+              name: '李四指标'
             }
           ]
         }
