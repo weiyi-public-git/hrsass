@@ -12,6 +12,10 @@
     <!-- <breadcrumb class="breadcrumb-container" /> -->
 
     <div class="right-menu">
+      <!-- 放置全屏插件 -->
+      <screen-full class="right-menu-item" />
+      <!-- 放置主题切换组件 -->
+      <theme-picker class="right-menu-item" />
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
           <img v-imageerror="dafaultImg" :src="staffPhoto" class="user-avatar">
@@ -37,10 +41,12 @@
 <script>
 import { mapGetters } from 'vuex'
 import Hamburger from '@/components/Hamburger'
+import ThemePicker from '@/components/ThemePicker/index.vue'
 
 export default {
   components: {
-    Hamburger
+    Hamburger,
+    ThemePicker
   },
   data() {
     return {
@@ -129,7 +135,7 @@ export default {
       height: 100%;
       font-size: 18px;
       color: #5a5e66;
-      vertical-align: text-bottom;
+      vertical-align: middle;
 
       &.hover-effect {
         cursor: pointer;

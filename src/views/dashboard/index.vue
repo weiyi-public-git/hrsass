@@ -88,7 +88,7 @@
             <span>绩效指数</span>
           </div>
           <!-- 放置雷达图 -->
-          <radar />
+          <Radar />
         </el-card>
         <!-- 帮助连接 -->
         <el-card class="box-card">
