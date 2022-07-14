@@ -72,10 +72,10 @@ export default {
 </script>
 
 <style  scoped>
- /deep/ .el-calendar-day {
+  .el-calendar-day {
   height:  auto;
  }
- /deep/ .el-calendar-table__row td,/deep/ .el-calendar-table tr td:first-child,  /deep/ .el-calendar-table__row td.prev{
+  .el-calendar-table__row td, .el-calendar-table tr td:first-child,   .el-calendar-table__row td.prev{
   border:none;
  }
 .date-content {
@@ -102,12 +102,12 @@ export default {
  display: inline-block;
 
 }
- /deep/ .el-calendar-table td.is-selected .text{
+ .el-calendar-table td.is-selected .text{
    background: #409eff;
    color: #fff;
    border-radius: 50%;
  }
- /deep/ .el-calendar__header {
+ .el-calendar__header {
    display: none
  }
 </style>

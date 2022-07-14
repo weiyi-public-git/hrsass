@@ -5,8 +5,8 @@
 
 <script>
 // var echarts = require('echarts')
-var echarts = require('echarts/lib/echarts')
-require('echarts/lib/chart/radar') // 按需引入 引入雷达图
+var echarts = require('echarts/lib/echarts') // 引入echarts主模块
+require('echarts/lib/chart/radar') // 引入雷达图
 // 引入提示框和标题组件
 require('echarts/lib/component/tooltip')
 require('echarts/lib/component/title')
